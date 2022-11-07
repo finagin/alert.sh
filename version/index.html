@@ -1,0 +1,36 @@
+<script>
+    var RAW_GIT = 'https://raw.githubusercontent.com/',
+        REPO = 'finagin/alert.sh',
+        FILE = 'alert.sh',
+        version = location.hash.replace(/^#/, '');
+
+    function semver() {
+        var regEx = '',
+            parts = [
+                /(?<major>0|[1-9]\d*).(?<minor>0|[1-9]\d*).(?<patch>0|[1-9]\d*)/,
+                /(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?/,
+                /(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?/,
+            ];
+
+        for (var arg in parts) {
+            regEx += parts[arg]
+                .toString()
+                .replace(/(^\/)|(\/$)/g, '');
+        }
+
+        return new RegExp('^' + regEx + '$');
+    }
+
+    switch (true) {
+        case semver().test(version):
+            break;
+        case version === 'latest':
+        case version === '':
+            version = 'master';
+            break;
+        default:
+            version = 'develop';
+    }
+
+    location.href = RAW_GIT + REPO + '/' + version + '/' + FILE;
+</script>
